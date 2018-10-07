@@ -1,0 +1,3 @@
+#!/home/wgr/plan9/bin/rc
+
+/home/wgr/plan9/bin/ls -pF | mc
