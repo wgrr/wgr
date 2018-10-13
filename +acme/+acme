@@ -1,0 +1,23 @@
+#!/usr/bin/env rc
+
+BROWSER='chromium'
+PATH=$PLAN9/bin:$PATH
+
+PAGER=$PLAN9/bin/nobs
+MANPAGER=$PLAN9/bin/nobs
+
+TERM='dumb'
+
+acmeshell=$PLAN9/bin/rc
+shell=$PLAN9/bin/rc
+SHELL=$PLAN9/bin/rc
+prompt='% '
+
+user=$USER
+home=$HOME
+
+tabstop=4
+
+font=/n/lib/fonts/'Go Regular'/12a/font
+
+exec acme -a -m /n/acme -l $home/acme.dump -f $font $*
