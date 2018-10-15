@@ -6,15 +6,16 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"regexp"
 )
 
-func grerep(f *os.File, from, delim *regexp.Regexp) error {
-	body, err := ioutil.ReadAll(f)
+func grerep(r io.Reader, from, delim *regexp.Regexp) error {
+	body, err := ioutil.ReadAll(r)
 	if err != nil {
-		return fmt.Errorf("grerep: readall %s: %s", f.Name(), err)
+		return fmt.Errorf("grerep: readall %v: %s", r, err)
 	}
 	loc1, loc2 := from.FindIndex(body), delim.FindIndex(body)
 	switch {
@@ -23,16 +24,7 @@ func grerep(f *os.File, from, delim *regexp.Regexp) error {
 	case loc1[0] > loc2[1]:
 		return nil
 	}
-	// skip $
-	var eol int
-	if body[loc1[1]] == '\n' {
-		eol++
-	}
-	_, err = os.Stdout.Write(body[loc1[1]:loc2[0]])
-	if err != nil {
-		return fmt.Errorf("grerep: write: %s", err)
-	}
-	_, err = os.Stdout.Write([]byte("\n"))
+	_, err = os.Stdout.Write(body[loc1[0]:loc2[1]])
 	if err != nil {
 		return fmt.Errorf("grerep: write: %s", err)
 	}
@@ -76,13 +68,13 @@ func main() {
 	}
 }
 
-func run(f *os.File, fromRe, delimRe string) {
+func run(r io.Reader, fromRe, delimRe string) {
 	from, delim, err := newRegexps(fromRe, delimRe)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s", err)
 		os.Exit(1)
 	}
-	err = grerep(f, from, delim)
+	err = grerep(r, from, delim)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s", err)
 		os.Exit(1)
