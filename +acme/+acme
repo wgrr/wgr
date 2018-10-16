@@ -18,8 +18,10 @@ home=$HOME
 
 tabstop=4
 
-font=/n/lib/fonts/'Go Regular'/12a/font
+vfont=$PLAN9/font/lucidasans/unicode.8.font
+ffont=$PLAN9/font/lucm/unicode.9.font
+
 
 fn cd { builtin cd $1 && awd $sysname }
 
-exec acme -a -m /n/acme -l $home/acme.dump -f $font $*
+exec acme -a -m /n/acme -l $home/acme.dump -f $vfont -F $ffont $*
