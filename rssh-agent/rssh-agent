@@ -1,0 +1,3 @@
+#!/usr/bin/env rc
+
+u ssh-agent -s | 9 sed 's/ export SSH_AUTH_SOCK;| export SSH_AGENT_PID;//g'
