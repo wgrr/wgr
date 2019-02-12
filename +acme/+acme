@@ -1,10 +1,10 @@
 #!/usr/bin/env rc
 
-BROWSER='chromium'
 PATH=$PLAN9/bin:$PATH
 
 PAGER=$PLAN9/bin/nobs
 MANPAGER=$PLAN9/bin/nobs
+NPROC=`{nproc}
 
 TERM='dumb'
 
@@ -16,12 +16,6 @@ prompt='% '
 user=$USER
 home=$HOME
 
-tabstop=4
-
-vfont=$PLAN9/font/lucsans/unicode.8.font
-ffont=$PLAN9/font/lucm/unicode.9.font
-
-
 fn cd { builtin cd $1 && awd $sysname }
 
-exec acme -a -m /n/acme -l $home/acme.dump -f $vfont -F $ffont $*
+exec acme -a $*
