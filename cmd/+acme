@@ -2,11 +2,6 @@
 
 . 9.rc
 
-if(! pgrep fontsrv >/dev/null >[2=1]){
-	echo starting fontsrv
-	fontsrv > /tmp/fontsrv.log >[2=1] &
-}
-
 if(! pgrep plumber >/dev/null >[2=1]){
 	echo starting plumber
 	plumber > /tmp/plumber.log >[2=1] &
@@ -26,13 +21,7 @@ prompt='% '
 user=$USER
 home=$HOME
 ns=`{namespace}
-font=/tmp/f/Go-Bold/9a/font
-
-if(! pgrep -f '^9pfuse.*'$ns'\/font' >/dev/null >[2=1]){
-	echo mounting fonts
-	mkdir -p /tmp/f
-	9pfuse $ns/font /tmp/f
-}
+font=$home/lib/font/GoMedium/10a/font
 
 fn cd { builtin cd $1 && awd $sysname }
 exec acme -a -f $font $*
