@@ -1,0 +1,32 @@
+#!/usr/bin/env rc
+
+. 9.rc
+
+fn usage { echo 'usage: surr char
+	valid chars are: " ( [ { < '' `
+	default char is "' >[1=2]
+}
+
+c="
+d=$c
+
+if(! ~ $#* 0){
+	switch($1){
+	case -* ; usage ; exit 1
+	case " ; d="
+	case '(' ; d=')'
+	case '[' ; d=']'
+	case '{' ; d='}'
+	case '<' ; d='>'
+	case '''' ; d=''''
+	case '`' ; d='`'
+	case *; usage ; exit 1
+	}
+	c=$1
+}
+
+
+ssam '{
+	x/^/ i/'$c'/
+	x/$/ i/'$d'/
+}'
