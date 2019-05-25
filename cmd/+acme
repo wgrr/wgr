@@ -21,7 +21,7 @@ prompt='% '
 user=$USER
 home=$HOME
 ns=`{namespace}
-font=$home/lib/font/GoMedium/10a/font
+font=$PLAN9/font/gofont/GoMedium/10a/font
 
 fn cd { builtin cd $1 && awd $sysname }
 exec acme -a -f $font $*
