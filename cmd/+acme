@@ -2,27 +2,22 @@
 
 . 9.rc
 
-if(! pgrep plumber >/dev/null >[2=1]){
-	echo starting plumber
+ns=`{namespace}
+if(! test -r $ns/plumb){
 	plumber > /tmp/plumber.log >[2=1] &
 }
 
-PAGER=$PLAN9/bin/nobs
-MANPAGER=$PLAN9/bin/nobs
-NPROC=`{nproc}
+PAGER=nobs
+MANPAGER=nobs
+TERM=dumb
 
-TERM='dumb'
-
-acmeshell=$PLAN9/bin/rc
-shell=$PLAN9/bin/rc
-SHELL=$PLAN9/bin/rc
+acmeshell=rc
+shell=rc
 prompt='% '
 
 user=$USER
-home=$HOME
-ns=`{namespace}
 font=$PLAN9/font/gofont/GoMedium/10a/font
 
 fn cd { builtin cd $1 && awd $sysname }
-exec acme -a -f $font $*
+exec acme -f $font $*
 
