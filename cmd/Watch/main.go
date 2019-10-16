@@ -28,7 +28,6 @@ func openWin() *acme.Win {
 	}
 	w.Name(filepath.Join(wd, "+watch"))
 	w.Ctl("clean")
-	w.Fprintf("tag", "Get ")
 	return w
 }
 
@@ -51,7 +50,18 @@ func main() {
 	}
 
 	win := openWin()
-
+	go func() {
+		del := []byte("Del")
+		for e := range win.EventChan() {
+			if e.C2 == 'x' || e.C2 == 'X' {
+				if bytes.Equal(e.Text, del) {
+					win.Ctl("delete")
+				}
+			}
+			win.WriteEvent(e)
+		}
+		os.Exit(0)
+	}()
 	for {
 		_, err = unix.Read(fd, evbuf[:])
 		if err != nil {
