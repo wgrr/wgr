@@ -1,0 +1,21 @@
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+home=/usr/wgr
+PASSWORD_STORE_DIR=$home/passwd
+
+PLAN9=$HOME/.local/plan9
+INFERNO=$HOME/.local/inferno
+PATH=$PATH:$PLAN9/bin:$INFERNO/Linux/386/bin
+PATH=$PATH:/usr/local/musl/bin
+
+GOPATH=$HOME
+GOTMPDIR=/tmp/gotmp
+
+if [ ! -d "/tmp/gotmp" ] ; then
+	mkdir -p $GOTMPDIR
+fi
+
+export PASSWORD_STORE_DIR home PLAN9 INFERNO PATH GOPATH GOTMPDIR
+
