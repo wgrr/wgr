@@ -1,21 +1,51 @@
 if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
+	PATH="$HOME/bin:$PATH"
 fi
 
-home=/usr/wgr
-PASSWORD_STORE_DIR=$home/passwd
-
-PLAN9=$HOME/.local/plan9
-INFERNO=$HOME/.local/inferno
-PATH=$PATH:$PLAN9/bin:$INFERNO/Linux/386/bin
-PATH=$PATH:/usr/local/musl/bin
-
-GOPATH=$HOME
-GOTMPDIR=/tmp/gotmp
-
-if [ ! -d "/tmp/gotmp" ] ; then
+tmp="${$TMPDIR:-/tmp}"
+GOTMPDIR="${tmp}/$(whoami).gotmp"
+if [ ! -d $GOTMPDIR ] ; then
 	mkdir -p $GOTMPDIR
 fi
 
-export PASSWORD_STORE_DIR home PLAN9 INFERNO PATH GOPATH GOTMPDIR
+XDG_RUNTIME_DIR="${tmp}/$(whoami).xdg"
+if [ ! -d $XDG_RUNTIME_DIR ] ; then
+	mkdir -p $XDG_RUNTIME_DIR
+fi
+
+PASSWORD_STORE_DIR=$HOME/passwd
+
+PLAN9=/usr/local/plan9
+INFERNO=/usr/local/inferno
+PATH=/usr/local/go/bin:$PATH:$PLAN9/bin:$INFERNO/Linux/386/bin
+
+GOPATH=$HOME
+
+# TODO: move those wayland/xdg stuff from here
+export QT_QPA_PLATFORM=wayland-egl
+export SDL_VIDEODRIVER=wayland
+export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+export _JAVA_AWT_WM_NONREPARENTING=1
+export MOZ_ENABLE_WAYLAND=1
+
+export XDG_DATA_HOME=$HOME/.data
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_SESSION_TYPE=wayland
+
+export MANPAGER=more
+export EDITOR=vim
+export DOCKER_CONFIG=$XDG_CONFIG_HOME/docker
+
+export XDG_RUNTIME_DIR PASSWORD_STORE_DIR PLAN9 INFERNO PATH GOPATH GOTMPDIR
+
+# mksh config
+export PS1=$(hostname)'% '
+
+alias gdb='gdb -q'
+alias ls='ls --color=never -A'
+
+# TODO: remove, should be login manager job
+if [ $(tty) = "/dev/tty1" ]; then
+        exec sway
+fi
 

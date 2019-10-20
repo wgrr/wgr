@@ -1,0 +1,22 @@
+[user]
+	name = Wagner Riffel
+	email = wgrriffel@gmail.com
+[alias]
+	st = status
+[sendemail]
+	annotate = yes
+	smtpserver = smtp.gmail.com
+	smtpuser = wgrriffel@gmail.com
+	smtpencryption = tls
+	smtpserverport = 587
+	suppresscc = self
+[format]
+	signOff = yes
+[http]
+	cookiefile = ~/.config/git/cookies
+[push]
+	default = simple
+[pull]
+	rebase = true
+[core]
+	editor=vim

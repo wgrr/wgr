@@ -1,0 +1,49 @@
+(package-initialize)
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/"))
+
+(global-set-key (kbd "C-x c") 'compile)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+(global-set-key (kbd "M-n") 'forward-paragraph)
+(global-set-key (kbd "M-p") 'backward-paragraph)
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+(global-set-key (kbd "C-x o") 'ace-window)
+(global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-;") 'er/expand-region)
+
+(setq require-final-newline 'query)
+(setq compilation-read-command nil)
+(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+(setq inhibit-startup-screen t)
+(set-default-font "Go-10")
+(setq backup-directory-alist '(("." . "/tmp/emacs")))
+(setq ring-bell-function 'ignore)
+
+(setq make-backup-files nil)
+
+(setq whitespace-line-column fill-column)
+(setq whitespace-style
+      '(face line-tail trailing empty))
+(global-whitespace-mode +1)
+
+(setq-default indicate-empty-lines t)
+(when (not indicate-empty-lines)
+  (toggle-indicate-empty-lines))
+
+(setq c-default-style "linux"
+      c-basic-offset 8)
+(setq-default cursor-type 'bar)
+
+(blink-cursor-mode 0)
+(ido-mode t)
+(delete-selection-mode t)
+(menu-bar-mode 0)
+(tool-bar-mode 0)
+(show-paren-mode t)
+(scroll-bar-mode -1)
+
+(global-font-lock-mode 0)
+
+;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
