@@ -3,7 +3,7 @@ if [ ! -d "$HOME/bin" ] ; then
 fi
 PATH="$HOME/bin:$PATH"
 
-tmp="${$TMPDIR:-/tmp}.$(whoami)"
+tmp="${TMPDIR:-/tmp}/$(whoami)"
 mkdir -p $tmp
 
 # TODO: move those wayland/xdg stuff from here
@@ -16,11 +16,11 @@ XDG_DOWNLOAD_DIR="${tmp}/dw"
 if [ ! -d $XDG_DOWNLOAD_DIR ] ; then
 	mkdir -p $XDG_RUNTIME_DIR
 fi
-export XDG_DOWNLOAD_DIR XDG_RUNTIME_DIR 
+export XDG_DOWNLOAD_DIR
+export XDG_RUNTIME_DIR 
 export XDG_DATA_HOME=$HOME/.data
 export XDG_CONFIG_HOME=$HOME/.config
 export XDG_SESSION_TYPE=wayland
-export MOZ_ENABLE_WAYLAND=1
 
 # the following are useless envs left 
 # here as reference
@@ -45,6 +45,7 @@ export GOPATH PASSWORD_STORE_DIR PLAN9 INFERNO PATH GOTMPDIR
 export MANPAGER=more
 export EDITOR=vim
 export DOCKER_CONFIG=$XDG_CONFIG_HOME/docker
+export MOZ_ENABLE_WAYLAND=1
 
 # mksh config
 export PS1=$(hostname)'% '
