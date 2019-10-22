@@ -1,23 +1,22 @@
-# Default config for sway
-#
-# Copy this to ~/.config/sway/config and edit it to your liking.
-#
-# Read `man 5 sway` for a complete reference.
+font pango: Noto Sans Mono 8
 
+#
 ### Variables
 #
-font pango:Noto Sans Mono 9
+
+set $blue #32323200
+set $gray #323232
+
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
-# Home row direction keys, like vim
+
 set $left h
 set $down j
 set $up k
 set $right l
-# Your preferred terminal emulator
+
 set $term alacritty
-# Your preferred application launcher
-# Note: it's recommended that you pass the final command to sway
+# TODO: use alacritty + fzf instead, possible to remove xwayland then...
 set $menu dmenu_path | dmenu | xargs swaymsg exec --
 
 ### Output configuration
@@ -72,11 +71,6 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     # Start your launcher
     bindsym $mod+d exec $menu
 
-    # Drag floating windows by holding down $mod and left mouse button.
-    # Resize them with right mouse button + $mod.
-    # Despite the name, also works for non-floating windows.
-    # Change normal to inverse to use left mouse button for resizing and right
-    # mouse button for dragging.
     floating_modifier $mod normal
 
     # Reload the configuration file
@@ -92,22 +86,12 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     bindsym $mod+$down focus down
     bindsym $mod+$up focus up
     bindsym $mod+$right focus right
-    # Or use $mod+[up|down|left|right]
-    bindsym $mod+Left focus left
-    bindsym $mod+Down focus down
-    bindsym $mod+Up focus up
-    bindsym $mod+Right focus right
 
     # Move the focused window with the same, but add Shift
     bindsym $mod+Shift+$left move left
     bindsym $mod+Shift+$down move down
     bindsym $mod+Shift+$up move up
     bindsym $mod+Shift+$right move right
-    # Ditto, with arrow keys
-    bindsym $mod+Shift+Left move left
-    bindsym $mod+Shift+Down move down
-    bindsym $mod+Shift+Up move up
-    bindsym $mod+Shift+Right move right
 #
 # Workspaces:
 #
@@ -176,20 +160,10 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 # Resizing containers:
 #
 mode "resize" {
-    # left will shrink the containers width
-    # right will grow the containers width
-    # up will shrink the containers height
-    # down will grow the containers height
     bindsym $left resize shrink width 10px
     bindsym $down resize grow height 10px
     bindsym $up resize shrink height 10px
     bindsym $right resize grow width 10px
-
-    # Ditto, with arrow keys
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
 
     # Return to default mode
     bindsym Return mode "default"
@@ -201,12 +175,13 @@ bindsym $mod+r mode "resize"
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
+
 bar {
     position top
-
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
     status_command while date; do sleep 1; done
+    pango_markup disabled
+    font pango: Noto Sans Mono 8 
+    strip_workspace_numbers yes
 
     colors {
         statusline #ffffff
@@ -215,4 +190,20 @@ bar {
     }
 }
 
-include /etc/sway/config.d/*
+client.focused $blue $blue #ffffff $blue $blue
+client.unfocused $gray $gray #ffffff $gray $gray
+client.focused_inactive $gray $gray #ffffff $gray $gray
+
+seat seat0 hide_cursor 5000
+default_border pixel 4
+
+for_window [title=".*"] title_format %title (class=%class app_id=%app_id instance=%instance shell=%shell)
+
+focus_on_window_activation urgent
+
+gaps inner 5
+
+exec mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob
+bindsym XF86AudioRaiseVolume exec amixer -q set Master 2%+ unmute && amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }' | sed 's/%//' > $SWAYSOCK.wob
+bindsym XF86AudioLowerVolume exec amixer -q set Master 2%- unmute && amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }' | sed 's/%//' > $SWAYSOCK.wob
+
