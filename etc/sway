@@ -204,6 +204,6 @@ focus_on_window_activation urgent
 gaps inner 5
 
 exec mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob
-bindsym XF86AudioRaiseVolume exec amixer -q set Master 2%+ unmute && amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }' | sed 's/%//' > $SWAYSOCK.wob
-bindsym XF86AudioLowerVolume exec amixer -q set Master 2%- unmute && amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }' | sed 's/%//' > $SWAYSOCK.wob
+bindsym XF86AudioRaiseVolume exec amixer -q set Master 5%+ unmute && amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }' | sed 's/%//' > $SWAYSOCK.wob
+bindsym XF86AudioLowerVolume exec amixer -q set Master 5%- unmute && amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }' | sed 's/%//' > $SWAYSOCK.wob
 
