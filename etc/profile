@@ -49,9 +49,7 @@ export MOZ_ENABLE_WAYLAND=1
 
 # mksh config
 export PS1=$(hostname)'% '
-
-alias gdb='gdb -q'
-alias ls='ls --color=never -A'
+export ENV=$HOME/etc/env
 
 eval $(ssh-agent)
 
