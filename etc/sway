@@ -66,7 +66,7 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     bindsym $mod+Return exec $term
 
     # Kill focused window
-    bindsym $mod+Shift+q kill
+    bindsym $mod+Shift+c kill
 
     # Start your launcher
     bindsym $mod+d exec $menu
@@ -74,7 +74,7 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     floating_modifier $mod normal
 
     # Reload the configuration file
-    bindsym $mod+Shift+c reload
+    bindsym $mod+Shift+q reload
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
@@ -201,7 +201,7 @@ for_window [title=".*"] title_format %title (class=%class app_id=%app_id instanc
 
 focus_on_window_activation urgent
 
-gaps inner 5
+gaps inner 1
 
 exec mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob
 bindsym XF86AudioRaiseVolume exec amixer -q set Master 5%+ unmute && amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }' | sed 's/%//' > $SWAYSOCK.wob
