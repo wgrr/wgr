@@ -35,23 +35,37 @@ if [ ! -d $GOTMPDIR ] ; then
 	mkdir -p $GOTMPDIR
 fi
 
+# TODO: as of go1.13, probably should move
+# to .config/go/env
 GOPATH=$HOME
+GOROOT=/usr/local/go
 GO111MODULE=on
+# TODO: delete pass, use age (github.com/github.com/FiloSottile/age)
+# instead, probably need to build myself, should be easy with Go
+# tho.
 PASSWORD_STORE_DIR=$HOME/passwd
-PLAN9=/usr/local/plan9
+# TODO: get p9p running with wayland, until there use 9base
+# instead
+# PLAN9=/usr/local/plan9
+NBASE=/usr/lib/9base
 INFERNO=/usr/local/inferno
-PATH=/usr/local/go/bin:$PATH:$PLAN9/bin:$INFERNO/Linux/386/bin
-export GO111MODULE GOPATH PASSWORD_STORE_DIR PLAN9 INFERNO PATH GOTMPDIR
+PATH=$GOROOT/bin:$NBASE/bin:$PATH:$GOPATH/bin:$INFERNO/Linux/386/bin
+export  GO111MODULE GOROOT GOPATH \
+	GOTMPDIR \
+	PASSWORD_STORE_DIR \
+	NBASE INFERNO \
+	PATH 
 
 export MANPAGER=more
 export EDITOR=vim
 export DOCKER_CONFIG=$XDG_CONFIG_HOME/docker
 export MOZ_ENABLE_WAYLAND=1
 
-# mksh config
 export PS1=$(hostname)'% '
+# mksh config
 export ENV=$HOME/etc/env
 
+# TODO: check if it's running before starting.
 eval $(ssh-agent)
 
 # TODO: remove, should be login manager job
