@@ -46,14 +46,13 @@ GO111MODULE=on
 PASSWORD_STORE_DIR=$HOME/passwd
 # TODO: get p9p running with wayland, until there use 9base
 # instead
-# PLAN9=/usr/local/plan9
-NBASE=/usr/lib/9base
+PLAN9=/usr/local/plan9
 INFERNO=/usr/local/inferno
-PATH=$GOROOT/bin:$NBASE/bin:$PATH:$GOPATH/bin:$INFERNO/Linux/386/bin
+PATH=$GOROOT/bin:$PLAN9/bin:$PATH:$GOPATH/bin:$INFERNO/Linux/386/bin
 export  GO111MODULE GOROOT GOPATH \
 	GOTMPDIR \
 	PASSWORD_STORE_DIR \
-	NBASE INFERNO \
+	PLAN9 INFERNO \
 	PATH 
 
 export MANPAGER=more
