@@ -18,6 +18,14 @@ set $right l
 set $term alacritty
 # TODO: use alacritty + fzf instead, possible to remove xwayland then...
 set $menu dmenu_path | dmenu | xargs swaymsg exec --
+exec firefox &
+
+input "9610:4102:Gaming_KB__Gaming_KB" {
+    repeat_delay 300
+    repeat_rate 50 
+    xkb_options caps:escape
+    xkb_numlock enabled
+}
 
 ### Output configuration
 #

@@ -1,0 +1,6 @@
+export PATH=$PLAN9/bin:$PATH
+export PS1=$(hostname)'% '
+
+alias gdb='gdb -q'
+
+fortune

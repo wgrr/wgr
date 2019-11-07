@@ -1,7 +1,6 @@
 if [ ! -d "$HOME/bin" ] ; then
 	mkdir -p $HOME/bin
 fi
-PATH="$HOME/bin:$PATH"
 
 tmp="${TMPDIR:-/tmp}/$(whoami)"
 mkdir -p $tmp
@@ -48,7 +47,7 @@ PASSWORD_STORE_DIR=$HOME/passwd
 # instead
 PLAN9=/usr/local/plan9
 INFERNO=/usr/local/inferno
-PATH=$GOROOT/bin:$PLAN9/bin:$PATH:$GOPATH/bin:$INFERNO/Linux/386/bin
+PATH=$HOME/bin:$GOROOT/bin:$GOPATH/bin:$INFERNO/Linux/386/bin:$PATH
 export  GO111MODULE GOROOT GOPATH \
 	GOTMPDIR \
 	PASSWORD_STORE_DIR \
@@ -59,13 +58,6 @@ export MANPAGER=more
 export EDITOR=vim
 export DOCKER_CONFIG=$XDG_CONFIG_HOME/docker
 export MOZ_ENABLE_WAYLAND=1
-
-export PS1=$(hostname)'% '
-# mksh config
-export ENV=$HOME/etc/env
-
-# TODO: check if it's running before starting.
-eval $(ssh-agent)
 
 # TODO: remove, should be login manager job
 if [ $(tty) = "/dev/tty1" ]; then
