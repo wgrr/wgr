@@ -16,8 +16,9 @@ shell=rc
 prompt='% '
 
 user=$USER
-font=$PLAN9/font/gofont/GoMedium/10a/font
+varfont=$PLAN9/font/gofont/GoMedium/10a/font
+fixfont=$PLAN9/font/gofont/GoMono/10a/font
 
 fn cd { builtin cd $1 && awd $sysname }
-exec acme -f $font $*
+exec acme -a -f $varfont -F $fixfont $*
 
