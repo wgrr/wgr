@@ -1,4 +1,4 @@
-export PATH=$PLAN9/bin:$PATH
+export PATH=$(spath $PLAN9/bin)
 export PS1=$(hostname)'% '
 
 alias gdb='gdb -q'

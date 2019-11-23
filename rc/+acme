@@ -2,19 +2,23 @@
 
 . 9.rc
 
+# make sure those are available to the plumber
+PAGER=nobs
+MANPAGER=nobs
+TERM=dumb
+# don't even bother with firefox here, it's designed against its own
+# users...
+BROWSER='chromium-browser'
+
 ns=`{namespace}
 if(! test -r $ns/plumb){
 	plumber > /tmp/plumber.log >[2=1] &
 }
 
-PAGER=nobs
-MANPAGER=nobs
-TERM=dumb
-
 acmeshell=rc
 shell=rc
 prompt='% '
-
+browser=$BROWSER
 user=$USER
 varfont=$PLAN9/font/gofont/GoMedium/10a/font
 fixfont=$PLAN9/font/gofont/GoMono/10a/font

@@ -16,7 +16,6 @@ set $up k
 set $right l
 
 set $term alacritty
-# TODO: use alacritty + fzf instead, possible to remove xwayland then...
 set $menu dmenu_path | dmenu | xargs swaymsg exec --
 exec firefox &
 
@@ -186,7 +185,7 @@ bindsym $mod+r mode "resize"
 
 bar {
     position top
-    status_command while date; do sleep 1; done
+    # TODO: better command, perhaps waybar? status_command
     pango_markup disabled
     font pango: Noto Sans Mono 8 
     strip_workspace_numbers yes
@@ -202,7 +201,7 @@ client.focused $blue $blue #ffffff $blue $blue
 client.unfocused $gray $gray #ffffff $gray $gray
 client.focused_inactive $gray $gray #ffffff $gray $gray
 
-seat seat0 hide_cursor 5000
+# seat seat0 hide_cursor 5000
 default_border pixel 4
 
 for_window [title=".*"] title_format %title (class=%class app_id=%app_id instance=%instance shell=%shell)
@@ -211,7 +210,7 @@ focus_on_window_activation urgent
 
 gaps inner 1
 
-exec mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob
-bindsym XF86AudioRaiseVolume exec amixer -q set Master 5%+ unmute && amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }' | sed 's/%//' > $SWAYSOCK.wob
-bindsym XF86AudioLowerVolume exec amixer -q set Master 5%- unmute && amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }' | sed 's/%//' > $SWAYSOCK.wob
-
+#exec mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob
+#bindsym XF86AudioRaiseVolume exec amixer -q set Master 5%+ unmute && amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }' | sed 's/%//' > $SWAYSOCK.wob
+#bindsym XF86AudioLowerVolume exec amixer -q set Master 5%- unmute && amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }' | sed 's/%//' > $SWAYSOCK.wob
+#
