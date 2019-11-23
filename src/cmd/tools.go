@@ -6,4 +6,6 @@ import (
 	_ "github.com/FiloSottile/age/cmd/age"
 	_ "9fans.net/go/acme/acmego"
 	_ "9fans.net/go/acme/Dict"
+	_ "rsc.io/2fa"
+	_ "rsc.io/sizeof"
 )
