@@ -1,8 +1,0 @@
-#!/bin/sh
-
-. 9.sh
-
-go=`godir`/bin/go
-
-exec $go $@
-

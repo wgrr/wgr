@@ -1,0 +1,27 @@
+set nocompatible
+
+syntax off
+
+filetype plugin on
+filetype indent on
+
+set autoindent noexpandtab tabstop=8 shiftwidth=8
+
+set writebackup backup backupdir=~/.local/share/vim/backup//
+set swapfile directory=~/.local/share/vim/swp//
+set undofile undodir=~/.local/share/vim/undo//
+
+set autowriteall
+
+set backspace=indent,eol,start
+set path=.,,,**
+set wildmenu
+set wildignore+=*.o,*.a,*.so,.git,.hg,.svn,.gitignore,.hgignore
+
+let g:netrw_liststyle = 3
+let g:netrw_banner = 0
+let g:netrw_browse_split = 1
+
+set laststatus=0
+
+set completeopt-=preview

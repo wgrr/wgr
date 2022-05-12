@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+
+set -euxo pipefail
+
+cd "$(dirname "${0}")"
+
+PREFIX=$HOME/.local
+CONFIG=$HOME/.config
+
+checkdeps() {
+local r=()
+local deps=("libx11-dev" "libxt-dev" "libfontconfig-dev" "libxext-dev" "golang-go" "build-essential" "mksh" "git" "mercurial" "vim" "isync" "openssl")
+for pkg in ${deps[@]}; do
+	if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+		r+=($pkg)
+	fi
+done
+if test "${#r[@]}" -ne "0"; then 
+	echo missing deps: "${r[@]}"
+	exit 1
+fi
+}
+
+envappend() {
+if ! grep "$1" $HOME/env > /dev/null; then
+echo "$1" >> $HOME/env
+fi
+}
+
+installp9() {
+
+PLAN9=$PREFIX/share/plan9
+mkdir -p "$PLAN9"
+git clone -q https://github.com/9fans/plan9port.git $PLAN9 || true
+p9rev=bab7b73
+
+local cflags="-O3 -flto -march=native -mtune=native -Wno-sizeof-array-div"
+local ldflags="-flto -static"
+(export NPROC=$(nproc); export CC9FLAGS=$cflags;
+	cd "$PLAN9" && git reset --hard "$p9rev" && ./INSTALL)
+envappend "PLAN9=$PREFIX/share/plan9 export PLAN9"
+envappend 'PATH=$PATH:$PLAN9/bin export PATH'
+}
+
+installgo() {
+local gobin="$PREFIX/bin" 
+local gopath="$PREFIX/share/go"
+mkdir -p $gobin $gopath
+
+envappend "GOBIN=$gobin export GOBIN"
+envappend "GOPATH=$gopath export GOPATH"
+(export GOBIN=$gobin; export GOPATH=$gopath; cd go &&
+	while read pkg; do
+		go install "$pkg" >/dev/null 2>&1
+	done < <(grep -E '_' tools.go | sed -E 's/.*"(.+)"/\1/g'))
+envappend "EDITOR=$PREFIX/bin/editinacme export EDITOR"
+}
+
+installetc() {
+mkdir -p $CONFIG/git
+cp -p -f etc/gitconfig $CONFIG/git/config
+cp -p -f etc/mksh $HOME/.mkshrc
+
+mkdir -p $PREFIX/share/vim/backup/
+mkdir -p $PREFIX/share/vim/swp/
+mkdir -p $PREFIX/share/vim/undo/
+
+cp -p -f etc/vim $HOME/.vimrc
+mkdir -p $CONFIG/hg
+
+cp -p -f etc/hg $CONFIG/hg/hgrc
+}
+
+installrc() {
+	cp -p -f rc/* $PREFIX/bin
+}
+
+checkdeps
+
+#installp9
+#installgo
+#installetc
+installrc
+
+if ! grep "\$HOME/env" $HOME/.profile > /dev/null; then
+echo '. "$HOME/env"' >> $HOME/.profile
+fi
+

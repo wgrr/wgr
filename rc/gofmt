@@ -1,8 +1,0 @@
-#!/bin/sh
-
-. 9.sh
-
-gofmt=`godir`/bin/gofmt
-
-exec $gofmt $@
-

@@ -1,3 +1,0 @@
-[default]
-screenshot-format=png
-gpu-context=wayland

@@ -1,0 +1,17 @@
+#!/usr/bin/env rc
+
+. 9.rc
+
+fn usage { echo 'usage: xsur re [char]' >[1=2]; exit 1 }
+
+if(~ $#* 0){
+	usage;
+}
+
+term='"'
+
+if(~ $2 ?){
+	term=$2
+}
+
+ssam ',x/.*$/ g/'$1'/ |sur \'$term

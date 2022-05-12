@@ -1,0 +1,32 @@
+#!/usr/bin/env mksh
+
+set -efuo pipefail
+
+PREFIX=${XDG_DATA_HOME:-$HOME/.local/share}
+DEST=$PREFIX/passwd
+
+usage() {
+echo usage: padd [password] name 1>&2
+exit 1;
+}
+
+case $# in
+1)
+	pass=$(pgen)
+	file=$(basename $1)
+	dir=$(dirname $1)
+	;;
+2)
+	pass="$1"
+	file=$(basename $2)
+	dir=$(dirname $2)
+	;;
+*)
+	usage
+	;;
+esac
+
+mkdir -p "$DEST/$dir"
+echo -n "$pass" | age -r 'age19s3g5pw26hpw6tsa0cxqgsl27dermszk795vp6upvmfgy9arxc4sh65q60' \
+	-o $DEST/$dir/$file.age
+

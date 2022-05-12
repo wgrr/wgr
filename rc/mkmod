@@ -1,0 +1,76 @@
+#!/usr/bin/env mksh
+
+set -euo pipefail
+
+die(){
+if [ "$1" != "" ];
+then
+	echo $0: $1
+fi
+echo $0 usage: [-a] [-m name] [-d dir] [-g version]
+exit 1
+}
+
+mkmod(){
+cd $moddir
+go mod init $modname 2>/dev/null
+echo module $modname > $moddir/go.mod
+echo >> $moddir/go.mod
+echo go $gover >> $moddir/go.mod
+mkmain
+if [ -z "${doacme:-}" ]; then
+	echo $moddir 
+else
+	B $moddir
+fi
+}
+
+mkmain(){
+echo 'package main;import "fmt";func main(){
+fmt.Println("hello world");}' | gofmt > main.go
+}
+
+moddir=$(mktemp -d /tmp/modXXX)
+modname=$(basename $moddir)
+gover=$(go version | awk '{sub(/^go/,"",$3); if($3 ~ /1\.[0-9]+\.[0-9]+/) sub(/\.[0-9]+$/,"",$3); print $3; }')
+
+while [ "$#" != '0' ];
+do
+	case "$1" in
+	-h*)
+		die
+		;;
+	-m)
+		if [ "$2" = "" ];
+		then
+			die "missing module name"
+		fi
+		modname=$2
+		shift
+		;;
+	-d)
+		if [ "$2" = "" ];
+		then
+			die "missing directory name"
+		fi
+		rmdir "$moddir"
+		moddir=$2
+		mkdir -p "$moddir"
+		shift
+		;;
+	-g)
+		if [ "$2" = "" ] || echo $2 | grep -E -v '1\.[0-9]+$' > /dev/null;
+		then
+			die "invalid go version"
+		fi
+		gover=$2
+		shift
+		;;
+	-a)
+		doacme=1
+		;;
+	esac
+	shift
+done
+
+mkmod

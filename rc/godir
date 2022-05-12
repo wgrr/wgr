@@ -1,7 +1,0 @@
-#!/bin/sh
-
-. 9.sh
-
-dir=${GODIR:-$HOME/bin}
-exec ls -p $dir | grep -v '^go[0-9]+.*beta|rc' | awk -F '.' -f $dir/go.awk -v home=$HOME
-

@@ -1,6 +1,0 @@
-#!/bin/sh
-
-# TODO: remove me, gpg(pass) should go
-# away in favor of age.
-exec env GISTAUTH=$(pass env/gist) gist
-

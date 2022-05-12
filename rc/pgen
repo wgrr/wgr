@@ -1,0 +1,9 @@
+#!/bin/mksh
+
+set -euo pipefail
+
+# CHARSET='`~1!2@3#4$5%6^7&8*9(0)-_=+qwertyuiop[]asdfghjkl;zxcvbnm,./QWERTYUIOP{}\\|ASDFGHJKL:"ZXCVBNM<>?'
+# 
+# tr -dc "$CHARSET" < /dev/urandom | dd of=/dev/stdout bs=1 count=25 status=none
+
+openssl rand -base64 21

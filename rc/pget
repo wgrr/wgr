@@ -1,0 +1,41 @@
+#/bin/mksh
+
+set -euo pipefail
+
+usage() {
+echo usage: pget [-o] name 1>&2
+exit 1
+}
+
+if [ $# = "0" ]; then
+	usage
+fi
+
+
+PREFIX=${XDG_DATA_HOME:-$HOME/.local/share}
+SRC=$PREFIX/passwd
+
+clean() {
+sleep 10
+echo -n | xclip -i -selection clipboard
+echo -n | xclip -i -selection primary
+echo -n | xclip -i -selection secondary
+}
+
+case $1 in
+-o)
+	dotee=1; shift;;
+-*)
+	usage;;
+esac
+
+pass=$(age -d -i "$PREFIX/keys/age/passwd" $SRC/$1.age)
+
+if [ -z ${dotee:-} ]; then
+	echo -n "$pass" | xclip -i -selection clipboard
+	echo passwd-get: copied $@ to clipboard\; cleaning in 10 seconds... > /dev/stderr
+	clean &
+else
+	echo -n "$pass" | tee
+fi
+

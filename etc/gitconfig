@@ -1,22 +1,25 @@
 [user]
-	name = Wagner Riffel
-	email = wgrriffel@gmail.com
-[alias]
-	st = status
-[sendemail]
-	annotate = yes
-	smtpserver = smtp.gmail.com
-	smtpuser = wgrriffel@gmail.com
-	smtpencryption = tls
-	smtpserverport = 587
-	suppresscc = self
-[format]
-	signOff = yes
-[http]
-	cookiefile = ~/.config/git/cookies
-[push]
-	default = simple
+	signingkey = 0F5F7129F2EF7471C27F52641E78F6F88989D9FA
+	email = w@104d.net
+	name = wagner riffel
+[commit]
+	gpgsign = true
 [pull]
 	rebase = true
-[core]
-	editor=vim
+[gpg]
+	program = gpg
+[sendemail]
+	smtpserver = serval
+	smtpuser = w@104d.net
+	smtpencryption = tls
+	smtpserverport = 587
+	annotate = true
+	confirm = always
+[format]
+	signOff = true
+[am]
+	messageid = true
+[merge]
+	log = true
+[init]
+	defaultBranch = default

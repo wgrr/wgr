@@ -1,0 +1,26 @@
+#!/usr/bin/env rc
+
+. 9.rc
+
+fn usage { echo $0 usage: surr [char] >[1=2]; exit 1 }
+
+c='"'
+term=$c
+
+if(! ~ $#* 0){
+	switch($1){
+	case -*; usage; exit 1
+	case "; term="
+	case '('; term=')'
+	case '['; term=']'
+	case '{'; term='}'
+	case '<'; term='>'
+	case ''''; term=''''
+	case '`'; term='`'
+	case *; usage;
+	}
+	c=$1
+}
+
+ssam '0 i/'$c'/
+$ i/'$term'/'

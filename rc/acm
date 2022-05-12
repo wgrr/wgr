@@ -1,0 +1,15 @@
+#!/usr/bin/env rc
+
+. 9.rc
+
+9pfuse unix!`{namespace}/font /n/font >/dev/null >[2=1]
+
+acmeshell=rc
+tabstop=8
+SHELL=rc
+
+prompt='; '
+
+fn cd { builtin cd $1 && awd $sysname }
+exec acme -a -f /n/font/Ubuntu-Medium/12a/font -F /n/font/UbuntuMono-Regular/11a/font $*
+
