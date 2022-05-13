@@ -1,8 +1,42 @@
 #!/usr/bin/env bash
 
-set -euxo pipefail
+set -euo pipefail
 
 cd "$(dirname "${0}")"
+
+usage(){
+echo usage: $0 '[-p9 -go -rc -etc] [-v]' > /dev/stderr
+exit 1
+}
+
+while [ "$#" != 0 ];
+do
+	case "$1" in
+	-p9)
+		dop9=false
+		shift
+		;;
+	-go)
+		dogo=false
+		shift
+		;;
+	-rc)
+		dorc=false
+		shift
+		;;
+	-etc)
+		doetc=false
+		shift
+		;;
+	-v)
+		set -x
+		shift
+		;;
+	*)
+		usage
+		;;
+esac
+done
 
 PREFIX=$HOME/.local
 CONFIG=$HOME/.config
@@ -15,7 +49,7 @@ for pkg in ${deps[@]}; do
 		r+=($pkg)
 	fi
 done
-if test "${#r[@]}" -ne "0"; then 
+if test "${#r[@]}" -ne "0"; then
 	echo missing deps: "${r[@]}"
 	exit 1
 fi
@@ -43,7 +77,7 @@ envappend 'PATH=$PATH:$PLAN9/bin export PATH'
 }
 
 installgo() {
-local gobin="$PREFIX/bin" 
+local gobin="$PREFIX/bin"
 local gopath="$PREFIX/share/go"
 mkdir -p $gobin $gopath
 
@@ -77,10 +111,10 @@ installrc() {
 
 checkdeps
 
-#installp9
-#installgo
-#installetc
-installrc
+[ -z "${dop9:-}" ] && installp9
+[ -z "${dogo:-}" ] && installgo
+[ -z "${doetc:-}" ] && installetc
+[ -z "${dorc:-}" ] && installrc
 
 if ! grep "\$HOME/env" $HOME/.profile > /dev/null; then
 echo '. "$HOME/env"' >> $HOME/.profile
