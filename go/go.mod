@@ -5,6 +5,7 @@ go 1.18
 require (
 	9fans.net/go v0.0.4
 	filippo.io/age v1.0.0
+	github.com/google/codesearch v1.2.0
 	golang.org/x/tools v0.1.11-0.20220407163324-91bcfb1bdf9c
 	golang.org/x/tools/gopls v0.8.3
 	honnef.co/go/tools v0.3.0
