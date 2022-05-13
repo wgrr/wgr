@@ -1,4 +1,4 @@
-#/bin/mksh
+#!/bin/mksh
 
 set -euo pipefail
 
