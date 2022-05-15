@@ -1,0 +1,57 @@
+From 28ed569542f5a9201918d1eec9036134bfac010e Mon Sep 17 00:00:00 2001
+From: wagner riffel <w@104d.net>
+Date: Sun, 15 May 2022 01:43:50 -0300
+Subject: [PATCH 2/3] devdraw: x11: remove window decorations
+
+Signed-off-by: wagner riffel <w@104d.net>
+---
+ src/cmd/devdraw/x11-memdraw.h | 1 +
+ src/cmd/devdraw/x11-screen.c  | 6 ++++++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/src/cmd/devdraw/x11-memdraw.h b/src/cmd/devdraw/x11-memdraw.h
+index 0c78b9b6..d740bf8c 100644
+--- a/src/cmd/devdraw/x11-memdraw.h
++++ b/src/cmd/devdraw/x11-memdraw.h
+@@ -62,6 +62,7 @@ struct Xprivate {
+ 	Atom		takefocus;
+ 	Atom		losefocus;
+ 	Atom		wmprotos;
++	Atom		boardless;
+ 	uint		putsnarf;
+ 	uint		assertsnarf;
+ 	int		kbuttons;
+diff --git a/src/cmd/devdraw/x11-screen.c b/src/cmd/devdraw/x11-screen.c
+index b1c58f9a..e844ac62 100644
+--- a/src/cmd/devdraw/x11-screen.c
++++ b/src/cmd/devdraw/x11-screen.c
+@@ -501,6 +501,7 @@ xattach(Client *client, char *label, char *winsize)
+ 	XWMHints hint;
+ 	Atom atoms[2];
+ 	Xwin *w;
++	long motif[3]; /* motif hints */
+ 
+ 	USED(client);
+ 	xscreen = DefaultScreenOfDisplay(_x.display);
+@@ -679,6 +680,7 @@ xattach(Client *client, char *label, char *winsize)
+ 		_x.takefocus = XInternAtom(_x.display, "WM_TAKE_FOCUS", False);
+ 		_x.losefocus = XInternAtom(_x.display, "_9WM_LOSE_FOCUS", False);
+ 		_x.wmprotos = XInternAtom(_x.display, "WM_PROTOCOLS", False);
++		_x.boardless = XInternAtom(_x.display, "_MOTIF_WM_HINTS", False);
+ 	}
+ 
+ 	atoms[0] = _x.takefocus;
+@@ -686,6 +688,10 @@ xattach(Client *client, char *label, char *winsize)
+ 	XChangeProperty(_x.display, w->drawable, _x.wmprotos, XA_ATOM, 32,
+ 		PropModeReplace, (uchar*)atoms, 2);
+ 
++	motif[0] = 1 << 1; // decorations field
++	motif[2] = 0; // 0 means drop window decorations
++	XChangeProperty(_x.display, w->drawable, _x.boardless, XA_ATOM, 32,
++			PropModeReplace, (uchar *)&motif, 3);
+ 	xsetcursor(w, &bigarrow);
+ 	/*
+ 	 * Put the window on the screen, check to see what size we actually got.
+-- 
+2.34.1
+

@@ -5,7 +5,7 @@ set -euo pipefail
 cd "$(dirname "${0}")"
 
 usage(){
-echo usage: $0 '[-p9 -go -rc -etc] [-v]' > /dev/stderr
+echo usage: $0 '[-p9 -go -rc -etc -font] [-v]' > /dev/stderr
 exit 1
 }
 
@@ -74,7 +74,10 @@ p9rev=bab7b73
 local cflags="-O3 -flto -march=native -mtune=native -Wno-sizeof-array-div"
 local ldflags="-flto -static"
 (export NPROC=$(nproc); export CC9FLAGS=$cflags;
-	cd "$PLAN9" && git reset --hard "$p9rev" && ./INSTALL)
+	cd "$PLAN9" &&
+	git reset --hard "$p9rev" &&
+	cat $OLDPWD/patch/* | git am -3 &&
+	./INSTALL)
 envappend "PLAN9=$PLAN9 export PLAN9"
 envappend 'PATH=$PATH:$PLAN9/bin export PATH'
 }
@@ -96,15 +99,15 @@ envappend "EDITOR=$PREFIX/bin/editinacme export EDITOR"
 installetc() {
 mkdir -p $CONFIG/git
 cp -p -f etc/gitconfig $CONFIG/git/config
+
 cp -p -f etc/mksh $HOME/.mkshrc
 
 mkdir -p $PREFIX/share/vim/backup/
 mkdir -p $PREFIX/share/vim/swp/
 mkdir -p $PREFIX/share/vim/undo/
-
 cp -p -f etc/vim $HOME/.vimrc
-mkdir -p $CONFIG/hg
 
+mkdir -p $CONFIG/hg
 cp -p -f etc/hg $CONFIG/hg/hgrc
 }
 
@@ -114,7 +117,9 @@ installrc() {
 
 installfont(){
 if ! pgrep '^fontsrv$' >/dev/null 2>&1; then
-	return
+	fontsrv &
+	fontsrvpid=$!
+	sleep 5;
 fi
 
 local npdir="font/$1"
@@ -130,19 +135,20 @@ done
 
 checkdeps
 
+[ -z "${doetc:-}" ] && installetc
 [ -z "${dop9:-}" ] && installp9
 [ -z "${dogo:-}" ] && installgo
-[ -z "${doetc:-}" ] && installetc
 [ -z "${dorc:-}" ] && installrc
-if [ -z "${dofont:-}" ] && [ -z "${PLAN9:-}" ]; then
-	local varpitch=${P9VARFONT:-"DejaVuSans:LiberationSans:Ubuntu-Medium"}
-	local fixpitch=${P9FIXFONT:-"DejaVuSansMono:LiberationMono:UbuntuMono-Regular"}
+if [ -z "${dofont:-}" ] && [ -n "${PLAN9:-}" ]; then
+	varpitch=${P9VARFONT:-"DejaVuSans:LiberationSans:Ubuntu-Medium"}
+	fixpitch=${P9FIXFONT:-"DejaVuSansMono:LiberationMono:UbuntuMono-Regular"}
 
 	awk -F ':' '{for(i=1; i <= NF; i++) print $i;}' <<< "$varpitch:$fixpitch"  |
 	while read f;
 	do
 		installfont $f
 	done
+	[ -n "${fontsrvpid:-}" ] && kill $fontsrvpid
 fi
 
 if ! grep "\$HOME/env" $HOME/.profile > /dev/null; then

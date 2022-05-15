@@ -13,10 +13,10 @@ varfont=()
 fixfont=()
 
 if(test -d $PLAN9/font/Ubuntu-Medium)
-	varfont=((-f) $PLAN9/font/Ubuntu-Medium)
+	varfont=((-f) $PLAN9/font/Ubuntu-Medium/12a/font)
 
 if(test -d $PLAN9/font/UbuntuMono-Regular)
-	fixfont=((-F) $PLAN9/font/UbuntuMono-Regular)
+	fixfont=((-F) $PLAN9/font/UbuntuMono-Regular/9a/font)
 
 fn cd { builtin cd $1 && awd $sysname }
 exec acme -a $varfont $fixfont $*
