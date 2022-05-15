@@ -2,14 +2,22 @@
 
 . 9.rc
 
-9pfuse unix!`{namespace}/font /n/font >/dev/null >[2=1]
-
 acmeshell=rc
 tabstop=8
 SHELL=rc
+PAGER=p
 
 prompt='; '
 
+varfont=()
+fixfont=()
+
+if(test -d $PLAN9/font/Ubuntu-Medium)
+	varfont=((-f) $PLAN9/font/Ubuntu-Medium)
+
+if(test -d $PLAN9/font/UbuntuMono-Regular)
+	fixfont=((-F) $PLAN9/font/UbuntuMono-Regular)
+
 fn cd { builtin cd $1 && awd $sysname }
-exec acme -a -f /n/font/Ubuntu-Medium/12a/font -F /n/font/UbuntuMono-Regular/11a/font $*
+exec acme -a $varfont $fixfont $*
 
