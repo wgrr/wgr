@@ -28,6 +28,10 @@ do
 		doetc=false
 		shift
 		;;
+	-font)
+		dofont=false
+		shift
+		;;
 	-v)
 		set -x
 		shift
@@ -57,12 +61,11 @@ fi
 
 envappend() {
 if ! grep "$1" $HOME/env > /dev/null; then
-echo "$1" >> $HOME/env
+	echo "$1" >> $HOME/env
 fi
 }
 
 installp9() {
-
 PLAN9=$PREFIX/share/plan9
 mkdir -p "$PLAN9"
 git clone -q https://github.com/9fans/plan9port.git $PLAN9 || true
@@ -72,7 +75,7 @@ local cflags="-O3 -flto -march=native -mtune=native -Wno-sizeof-array-div"
 local ldflags="-flto -static"
 (export NPROC=$(nproc); export CC9FLAGS=$cflags;
 	cd "$PLAN9" && git reset --hard "$p9rev" && ./INSTALL)
-envappend "PLAN9=$PREFIX/share/plan9 export PLAN9"
+envappend "PLAN9=$PLAN9 export PLAN9"
 envappend 'PATH=$PATH:$PLAN9/bin export PATH'
 }
 
@@ -109,12 +112,38 @@ installrc() {
 	cp -p -f rc/* $PREFIX/bin
 }
 
+installfont(){
+if ! pgrep '^fontsrv$' >/dev/null 2>&1; then
+	return
+fi
+
+local npdir="font/$1"
+for font in $(9p ls "$npdir"); do
+	local fontdir="$npdir/$font"
+	local dest="$PLAN9/$fontdir"
+	mkdir -p $dest
+	for bit in $(9p ls "$fontdir"); do
+		9p read "$fontdir/$bit" > "$dest/$bit"
+	done
+done
+}
+
 checkdeps
 
 [ -z "${dop9:-}" ] && installp9
 [ -z "${dogo:-}" ] && installgo
 [ -z "${doetc:-}" ] && installetc
 [ -z "${dorc:-}" ] && installrc
+if [ -z "${dofont:-}" ] && [ -z "${PLAN9:-}" ]; then
+	local varpitch=${P9VARFONT:-"DejaVuSans:LiberationSans:Ubuntu-Medium"}
+	local fixpitch=${P9FIXFONT:-"DejaVuSansMono:LiberationMono:UbuntuMono-Regular"}
+
+	awk -F ':' '{for(i=1; i <= NF; i++) print $i;}' <<< "$varpitch:$fixpitch"  |
+	while read f;
+	do
+		installfont $f
+	done
+fi
 
 if ! grep "\$HOME/env" $HOME/.profile > /dev/null; then
 echo '. "$HOME/env"' >> $HOME/.profile
