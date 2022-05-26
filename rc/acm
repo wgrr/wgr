@@ -11,6 +11,7 @@ prompt='; '
 
 varfont=()
 fixfont=()
+dump=()
 
 if(test -d $PLAN9/font/Ubuntu-Medium)
 	varfont=((-f) $PLAN9/font/Ubuntu-Medium/12a/font)
@@ -18,6 +19,8 @@ if(test -d $PLAN9/font/Ubuntu-Medium)
 if(test -d $PLAN9/font/UbuntuMono-Regular)
 	fixfont=((-F) $PLAN9/font/UbuntuMono-Regular/9a/font)
 
-fn cd { builtin cd $1 && awd $sysname }
-exec acme -a $varfont $fixfont $*
+if(test -f $home/acme.dump)
+	dump=((-l) $home/acme.dump)
 
+fn cd { builtin cd $1 && awd $sysname }
+exec acme -a $dump $varfont $fixfont $*
