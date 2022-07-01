@@ -3,9 +3,9 @@
 package tools
 
 import (
+	_ "9fans.net/go/acme/Watch"
 	_ "9fans.net/go/acme/acmego"
 	_ "9fans.net/go/acme/editinacme"
-	_ "9fans.net/go/acme/Watch"
 
 	_ "filippo.io/age/cmd/age"
 	_ "filippo.io/age/cmd/age-keygen"
@@ -24,4 +24,6 @@ import (
 	_ "mvdan.cc/gofumpt"
 
 	_ "robpike.io/ivy"
+
+	_ "rsc.io/tmp/jsonfmt"
 )
