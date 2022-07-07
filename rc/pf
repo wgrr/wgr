@@ -1,0 +1,3 @@
+#!/bin/mksh
+
+grep -E -i -n '^func (\([^)]+\) )?'$1'\(' *.go /dev/null
