@@ -9,27 +9,36 @@ echo usage: $0 '[-p9 -go -rc -etc -font] [-v]' > /dev/stderr
 exit 1
 }
 
+if [ "$#" = 0 ];
+then
+	dop9=1
+	dogo=1
+	dorc=1
+	doetc=1
+	dofont=1
+fi
+
 while [ "$#" != 0 ];
 do
 	case "$1" in
-	-p9)
-		dop9=false
+	+p9)
+		dop9=1
 		shift
 		;;
-	-go)
-		dogo=false
+	+go)
+		dogo=1
 		shift
 		;;
-	-rc)
-		dorc=false
+	+rc)
+		dorc=1
 		shift
 		;;
-	-etc)
-		doetc=false
+	+etc)
+		doetc=1
 		shift
 		;;
-	-font)
-		dofont=false
+	+font)
+		dofont=1
 		shift
 		;;
 	-v)
@@ -135,11 +144,11 @@ done
 
 checkdeps
 
-[ -z "${doetc:-}" ] && installetc
-[ -z "${dop9:-}" ] && installp9
-[ -z "${dogo:-}" ] && installgo
-[ -z "${dorc:-}" ] && installrc
-if [ -z "${dofont:-}" ] && [ -n "${PLAN9:-}" ]; then
+[ -n "${doetc:-}" ] && installetc
+[ -n "${dop9:-}" ] && installp9
+[ -n "${dogo:-}" ] && installgo
+[ -n "${dorc:-}" ] && installrc
+if [ -n "${dofont:-}" ] && [ -n "${PLAN9:-}" ]; then
 	varpitch=${P9VARFONT:-"DejaVuSans:LiberationSans:Ubuntu-Medium"}
 	fixpitch=${P9FIXFONT:-"DejaVuSansMono:LiberationMono:UbuntuMono-Regular"}
 
