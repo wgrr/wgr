@@ -1,0 +1,14 @@
+# avarage of x
+op avg x = (+/x)/rho x
+
+# difference between x and a third of x
+op dthird x = x - x/3
+
+# generate multiples of n for vector x
+op n mults x = (-1 + iota (rho x)) * n
+
+# decode x vector as little endian
+op tole x = |/(x << (8 mults x))
+
+# decode x vector as big endian
+op tobe x = |/((rot x) << (8 mults x))

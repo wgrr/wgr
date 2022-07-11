@@ -14,6 +14,7 @@ then
 	dop9=1
 	dogo=1
 	dorc=1
+	dolib=1
 	doetc=1
 	dofont=1
 fi
@@ -31,6 +32,10 @@ do
 		;;
 	+rc)
 		dorc=1
+		shift
+		;;
+	+lib)
+		dolib=1
 		shift
 		;;
 	+etc)
@@ -120,8 +125,14 @@ mkdir -p $CONFIG/hg
 cp -p -f etc/hg $CONFIG/hg/hgrc
 }
 
+installLib() {
+mkdir -p $PREFIX/lib
+cp -p -f lib/* $PREFIX/lib
+}
+
 installrc() {
-	cp -p -f rc/* $PREFIX/bin
+mkdir -p $PREFIX/bin
+cp -p -f rc/* $PREFIX/bin
 }
 
 installfont(){
@@ -148,6 +159,7 @@ checkdeps
 [ -n "${dop9:-}" ] && installp9
 [ -n "${dogo:-}" ] && installgo
 [ -n "${dorc:-}" ] && installrc
+[ -n "${dolib:-}" ] && installLib
 if [ -n "${dofont:-}" ] && [ -n "${PLAN9:-}" ]; then
 	varpitch=${P9VARFONT:-"DejaVuSans:LiberationSans:Ubuntu-Medium"}
 	fixpitch=${P9FIXFONT:-"DejaVuSansMono:LiberationMono:UbuntuMono-Regular"}

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ivy -g -f $HOME/.local/lib/ivy.lib
