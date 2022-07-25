@@ -16,7 +16,7 @@ import (
 
 	_ "golang.org/x/tools/cmd/goimports"
 	_ "golang.org/x/tools/cmd/stringer"
-	_ "golang.org/x/tools/godoc"
+	_ "golang.org/x/tools/cmd/godoc"
 	_ "golang.org/x/tools/gopls"
 
 	_ "honnef.co/go/tools/cmd/staticcheck"
